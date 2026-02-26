@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김민수 - 소프트웨어 개발자</title>
+    <style>
+        :root {
+            --navy: #0a192f;
+            --light-navy: #112240;
+            --lightest-navy: #233554;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --white: #e6f1ff;
+            --green: #64ffda;
+            --green-tint: rgba(100, 255, 218, 0.1);
+            --font-sans: 'Segoe UI', -apple-system, system-ui, sans-serif;
+            --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+            --fz-xxs: 12px;
+            --fz-xs: 13px;
+            --fz-sm: 14px;
+            --fz-md: 16px;
+            --fz-lg: 18px;
+            --fz-xl: 20px;
+            --fz-xxl: 22px;
+            --fz-heading: 32px;
+            --border-radius: 4px;
+            --nav-height: 100px;
+            --nav-scroll-height: 70px;
+            --easing: cubic-bezier(0.645, 0.045, 0.355, 1);
+            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--navy);
+            color: var(--slate);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: var(--lightest-navy);
+            color: var(--lightest-slate);
+        }
+
+        /* 내비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        nav.scrolled {
+            height: var(--nav-scroll-height);
+            box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xl);
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--lightest-slate);
+            text-decoration: none;
+            transition: var(--transition);
+            counter-increment: item 1;
+            padding: 10px;
+        }
+
+        .nav-links a::before {
+            content: "0" counter(item) ". ";
+            color: var(--green);
+            margin-right: 5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        /* 사이드 소셜 링크 */
+        .social-side {
+            position: fixed;
+            left: 40px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .social-side::after {
+            content: '';
+            width: 1px;
+            height: 90px;
+            background-color: var(--light-slate);
+        }
+
+        .social-link {
+            padding: 10px;
+            color: var(--light-slate);
+            transition: var(--transition);
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            color: var(--green);
+            transform: translateY(-3px);
+        }
+
+        /* 이메일 사이드 */
+        .email-side {
+            position: fixed;
+            right: 40px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .email-side::after {
+            content: '';
+            width: 1px;
+            height: 90px;
+            background-color: var(--light-slate);
+        }
+
+        .email-link {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xxs);
+            color: var(--light-slate);
+            letter-spacing: 0.1em;
+            writing-mode: vertical-rl;
+            text-decoration: none;
+            padding: 10px;
+            transition: var(--transition);
+        }
+
+        .email-link:hover {
+            color: var(--green);
+            transform: translateY(-3px);
+        }
+
+        /* 메인 컨테이너 */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 150px;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 100px 0;
+            max-width: 1000px;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .hero-intro {
+            font-family: var(--font-mono);
+            font-size: var(--fz-md);
+            color: var(--green);
+            margin-bottom: 30px;
+        }
+
+        .hero-title {
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 600;
+            color: var(--lightest-slate);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(30px, 6vw, 80px);
+            font-weight: 600;
+            color: var(--slate);
+            line-height: 1.1;
+            margin-bottom: 25px;
+            white-space: nowrap;
+        }
+
+        .hero-description {
+            max-width: 540px;
+            font-size: var(--fz-xl);
+            color: var(--slate);
+            line-height: 1.8;
+        }
+
+        /* 섹션 공통 스타일 */
+        .section-header {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin: 10px 0 40px;
+            width: 100%;
+            font-size: var(--fz-heading);
+            white-space: nowrap;
+            counter-increment: section 1;
+        }
+
+        .section-header::before {
+            content: "0" counter(section) ".";
+            font-family: var(--font-mono);
+            font-size: var(--fz-xl);
+            color: var(--green);
+            margin-right: 10px;
+            font-weight: 400;
+        }
+
+        .section-header::after {
+            content: '';
+            display: block;
+            position: relative;
+            width: 300px;
+            height: 1px;
+            margin-left: 20px;
+            background-color: var(--lightest-navy);
+        }
+
+        .section-title {
+            color: var(--lightest-slate);
+            font-weight: 600;
+        }
+
+        /* About 섹션 */
+        .about-content {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 50px;
+        }
+
+        .about-text p {
+            color: var(--slate);
+            font-size: var(--fz-lg);
+            margin-bottom: 15px;
+        }
+
+        .skills-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(140px, 200px));
+            gap: 10px;
+            padding: 0;
+            margin: 20px 0;
+            list-style: none;
+        }
+
+        .skills-list li {
+            position: relative;
+            padding-left: 20px;
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--slate);
+        }
+
+        .skills-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-size: var(--fz-sm);
+            line-height: 12px;
+        }
+
+        /* 프로필 이미지 */
+        .profile-pic-wrapper {
+            position: relative;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 100%;
+            border-radius: var(--border-radius);
+            background-color: var(--green);
+        }
+
+        .profile-pic-container::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--green);
+            border-radius: var(--border-radius);
+            top: 20px;
+            left: 20px;
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .profile-pic-container:hover::before {
+            top: 15px;
+            left: 15px;
+        }
+
+        .profile-pic {
+            position: relative;
+            width: 100%;
+            border-radius: var(--border-radius);
+            mix-blend-mode: multiply;
+            filter: grayscale(100%) contrast(1) brightness(90%);
+            transition: var(--transition);
+        }
+
+        .profile-pic-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--green);
+            mix-blend-mode: multiply;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+
+        .profile-pic-container:hover .profile-pic-overlay {
+            opacity: 0;
+        }
+
+        .profile-pic-container:hover .profile-pic {
+            filter: grayscale(0%) contrast(1) brightness(100%);
+        }
+
+        /* 경험 섹션 */
+        .experience-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            background: none;
+            border: none;
+            border-left: 2px solid var(--lightest-navy);
+            color: var(--slate);
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .tab-button:hover {
+            background-color: var(--lightest-navy);
+            color: var(--green);
+        }
+
+        .tab-button.active {
+            color: var(--green);
+            border-left-color: var(--green);
+            background-color: var(--lightest-navy);
+        }
+
+        .experience-content {
+            padding: 25px 5px;
+        }
+
+        .experience-content h3 {
+            color: var(--lightest-slate);
+            font-size: var(--fz-xxl);
+            margin-bottom: 5px;
+        }
+
+        .experience-content .company {
+            color: var(--green);
+        }
+
+        .experience-content .date {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--light-slate);
+            margin-bottom: 25px;
+        }
+
+        .experience-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .experience-content ul li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 10px;
+            color: var(--slate);
+            font-size: var(--fz-lg);
+        }
+
+        .experience-content ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+        }
+
+        /* 목표 섹션 */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .goal-item {
+            background-color: var(--light-navy);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .goal-item:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 20px 30px -15px rgba(2, 12, 27, 0.7);
+        }
+
+        .goal-item h3 {
+            color: var(--lightest-slate);
+            font-size: var(--fz-xxl);
+            margin-bottom: 15px;
+        }
+
+        .goal-item .goal-label {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--green);
+            margin-bottom: 10px;
+        }
+
+        .goal-item p {
+            color: var(--slate);
+            font-size: var(--fz-md);
+            line-height: 1.8;
+        }
+
+        /* Contact 섹션 */
+        .contact {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact .overline {
+            font-family: var(--font-mono);
+            font-size: var(--fz-md);
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .contact h2 {
+            font-size: clamp(40px, 5vw, 60px);
+            color: var(--lightest-slate);
+            margin-bottom: 20px;
+        }
+
+        .contact p {
+            color: var(--slate);
+            font-size: var(--fz-lg);
+            line-height: 1.8;
+            margin-bottom: 50px;
+        }
+
+        .contact-button {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: var(--fz-sm);
+            color: var(--green);
+            background-color: transparent;
+            border: 1px solid var(--green);
+            border-radius: var(--border-radius);
+            padding: 1.25rem 1.75rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .contact-button:hover {
+            background-color: var(--green-tint);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--light-slate);
+        }
+
+        /* 애니메이션 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 히어로 프로필 이미지 (상단) */
+        .hero-profile-wrapper {
+            position: fixed;
+            top: 120px;
+            right: 80px;
+            width: 120px;
+            height: 120px;
+            z-index: 100;
+            opacity: 0;
+            animation: fadeInProfile 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInProfile {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--green);
+            object-fit: cover;
+            box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+            transition: var(--transition);
+            filter: grayscale(100%);
+        }
+
+        .hero-profile-pic:hover {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+            box-shadow: 0 20px 30px -15px var(--green-tint);
+        }
+
+        /* 반응형 */
+        @media (max-width: 1080px) {
+            main {
+                padding: 0 100px;
+            }
+            
+            .hero-profile-wrapper {
+                right: 50px;
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 0 50px;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .social-side,
+            .email-side {
+                display: none;
+            }
+
+            nav {
+                padding: 0 25px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                border-left: none;
+                border-bottom: 2px solid var(--lightest-navy);
+            }
+
+            .tab-button.active {
+                border-left: none;
+                border-bottom-color: var(--green);
+            }
+
+            .hero-profile-wrapper {
+                position: static;
+                margin: 30px auto 0;
+                width: 150px;
+                height: 150px;
+                opacity: 1;
+            }
+
+            .profile-pic-wrapper {
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 내비게이션 -->
+    <nav id="navbar">
+        <div class="logo">&lt;김민수 /&gt;</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#goals">Goals</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- 상단 고정 프로필 이미지 -->
+    <div class="hero-profile-wrapper">
+        <img src="샘플 자료/캐릭터 이미지.png" alt="김민수 프로필" class="hero-profile-pic">
+    </div>
+
+    <!-- 소셜 사이드바 -->
+    <div class="social-side">
+        <a href="https://github.com/minsukim" class="social-link" target="_blank" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+        </a>
+        <a href="https://linkedin.com" class="social-link" target="_blank" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+        </a>
+    </div>
+
+    <!-- 이메일 사이드바 -->
+    <div class="email-side">
+        <a href="mailto:minsu.kim@email.com" class="email-link">minsu.kim@email.com</a>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+        <!-- 히어로 섹션 -->
+        <section class="hero fade-in">
+            <p class="hero-intro">안녕하세요, 제 이름은</p>
+            <h1 class="hero-title">김민수입니다.</h1>
+            <h2 class="hero-subtitle">사용자 가치를 만드는 개발자.</h2>
+            <p class="hero-description">
+                저는 사용자에게 진정한 가치를 제공하는 소프트웨어를 개발하는 데 열정을 가진 개발자입니다. 
+                현재는 웹 개발에 집중하고 있으며, 뛰어난 사용자 경험을 제공하는 제품을 만드는 것을 목표로 하고 있습니다.
+            </p>
+        </section>
+
+        <!-- About 섹션 -->
+        <section id="about" class="fade-in">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        안녕하세요! 저는 김민수이며, 사용자에게 가치 있는 서비스를 제공하는 것을 최우선으로 하는 소프트웨어 개발자입니다.
+                    </p>
+                    <p>
+                        대학에서 컴퓨터공학을 전공하며 프로그래밍의 기초를 다졌고, 졸업 후 2년간 스타트업에서 웹 개발 업무를 담당했습니다. 
+                        빠르게 변화하는 IT 업계에서 새로운 기술을 학습하고 적용하는 것에 큰 흥미를 느끼며, 
+                        특히 사용자 경험을 개선하는 기술적 솔루션을 찾는 것을 좋아합니다.
+                    </p>
+                    <p>
+                        저의 생활신조는 <strong style="color: var(--green);">"기술은 사람을 위해 존재한다"</strong>입니다. 
+                        아무리 기술적으로 뛰어난 코드라도 실제 사용자에게 도움이 되지 않는다면 의미가 없다고 생각합니다.
+                    </p>
+                    <p>다음은 제가 최근에 작업한 기술들입니다:</p>
+                    <ul class="skills-list">
+                        <li>JavaScript (ES6+)</li>
+                        <li>React</li>
+                        <li>Node.js</li>
+                        <li>TypeScript</li>
+                        <li>HTML & CSS</li>
+                        <li>Git & GitHub</li>
+                    </ul>
+                    <p style="margin-top: 20px;">
+                        <strong>성격의 강점:</strong> 꾸준한 학습 의지, 뛰어난 협업과 소통 능력, 문제 해결 지향적 사고방식
+                    </p>
+                </div>
+                <div class="about-image">
+                    <div class="profile-pic-wrapper">
+                        <div class="profile-pic-container">
+                            <img src="샘플 자료/캐릭터 이미지.png" alt="김민수 프로필" class="profile-pic">
+                            <div class="profile-pic-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience 섹션 -->
+        <section id="experience" class="fade-in">
+            <div class="section-header">
+                <h2 class="section-title">경험 및 활동</h2>
+            </div>
+            <div class="experience-tabs">
+                <button class="tab-button active" onclick="showExperience(0)">해커톤</button>
+                <button class="tab-button" onclick="showExperience(1)">풀스택 개발</button>
+                <button class="tab-button" onclick="showExperience(2)">멘토링</button>
+            </div>
+            <div class="experience-panels">
+                <div class="experience-content" id="exp-0">
+                    <h3>교내 해커톤 <span class="company">우수상 수상</span></h3>
+                    <p class="date">대학교 3학년</p>
+                    <ul>
+                        <li>5명의 팀원과 함께 "지역 상권 활성화 앱"을 개발하여 우수상 수상</li>
+                        <li>팀장으로서 프로젝트 기획부터 완성까지 48시간 동안 주도</li>
+                        <li>React Native를 활용한 크로스 플랫폼 모바일 앱 개발</li>
+                        <li>짧은 시간 내에 팀원들의 역량을 파악하고 업무를 효율적으로 분배</li>
+                    </ul>
+                </div>
+                <div class="experience-content" id="exp-1" style="display: none;">
+                    <h3>풀스택 개발 <span class="company">경험</span></h3>
+                    <p class="date">대학교 재학 중</p>
+                    <ul>
+                        <li>백엔드 API 설계부터 프론트엔드 구현까지 전 과정 참여</li>
+                        <li>RESTful API 설계 및 데이터베이스 모델링 경험</li>
+                        <li>React를 활용한 인터랙티브한 사용자 인터페이스 구현</li>
+                        <li>Git을 활용한 버전 관리 및 협업 경험</li>
+                        <li>리더십을 발휘하여 팀 프로젝트를 성공적으로 완수</li>
+                    </ul>
+                </div>
+                <div class="experience-content" id="exp-2" style="display: none;">
+                    <h3>프로그래밍 <span class="company">멘토링</span></h3>
+                    <p class="date">대학교 4년간</p>
+                    <ul>
+                        <li>컴퓨터공학과 학회에서 후배들에게 프로그래밍 멘토링 진행</li>
+                        <li>복잡한 프로그래밍 개념을 쉽게 설명하는 능력 함양</li>
+                        <li>코드 리뷰를 통한 효과적인 피드백 제공 방법 학습</li>
+                        <li>기술 공유 세션을 통해 커뮤니케이션 스킬 향상</li>
+                        <li>멘티들의 성장을 지켜보며 교육자로서의 보람을 느낌</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals 섹션 -->
+        <section id="goals" class="fade-in">
+            <div class="section-header">
+                <h2 class="section-title">입사 후 포부</h2>
+            </div>
+            <div class="goals-grid">
+                <div class="goal-item">
+                    <p class="goal-label">단기 목표</p>
+                    <h3>빠른 적응과 기여</h3>
+                    <p>
+                        입사 후에는 먼저 개발 문화와 코딩 컨벤션에 빠르게 적응하여 팀의 일원으로서 역할을 다하겠습니다. 
+                        맡은 업무를 성실히 수행하면서 비즈니스 도메인에 대한 이해도를 높이고, 
+                        기존 팀원들과의 협업을 통해 개발 실력을 향상시키겠습니다.
+                    </p>
+                </div>
+                <div class="goal-item">
+                    <p class="goal-label">중장기 목표</p>
+                    <h3>기술 리더로 성장</h3>
+                    <p>
+                        기술 리더로 성장하여 주니어 개발자들을 멘토링하고, 새로운 기술 도입과 개발 프로세스 개선에 기여하고 싶습니다. 
+                        특히 클라우드 기술과 마이크로서비스 아키텍처에 대한 전문성을 쌓아 
+                        서비스의 확장성과 안정성 향상에 기여하겠습니다.
+                    </p>
+                </div>
+                <div class="goal-item">
+                    <p class="goal-label">궁극적 목표</p>
+                    <h3>혁신적인 가치 창출</h3>
+                    <p>
+                        회사와 함께 성장하여 IT 업계에서 인정받는 개발자가 되고, 
+                        사용자에게 진정한 가치를 제공하는 혁신적인 서비스 개발에 핵심적인 역할을 담당하고 싶습니다. 
+                        기술은 사람을 위해 존재한다는 신념으로 사용자 중심의 제품을 만들겠습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact 섹션 -->
+        <section id="contact" class="contact fade-in">
+            <p class="overline">다음 단계는?</p>
+            <h2>연락하기</h2>
+            <p>
+                새로운 기회를 찾고 있으며, 언제든지 연락 주시면 성심껏 답변드리겠습니다. 
+                질문이 있으시거나 인사하고 싶으시다면 부담 없이 메시지를 보내주세요!
+            </p>
+            <a href="mailto:minsu.kim@email.com" class="contact-button">이메일 보내기</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Designed & Built by 김민수</p>
+        <p style="margin-top: 10px;">📱 010-1234-5678</p>
+    </footer>
+
+    <script>
+        // 네비게이션 스크롤 효과
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Experience 탭 전환
+        function showExperience(index) {
+            const buttons = document.querySelectorAll('.tab-button');
+            const panels = document.querySelectorAll('.experience-content');
+            
+            buttons.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            panels.forEach((panel, i) => {
+                if (i === index) {
+                    panel.style.display = 'block';
+                } else {
+                    panel.style.display = 'none';
+                }
+            });
+        }
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
